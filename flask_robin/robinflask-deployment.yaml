@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: robinflask-deployment
+  labels:
+    app: flaskrobin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flaskrobin
+  template:
+    metadata:
+      labels:
+        app: flaskrobin
+    spec:
+      containers:
+      - name: robinflask-container
+        image: localhost:32000/robinflask:v2
+        ports:
+        - containerPort: 8001

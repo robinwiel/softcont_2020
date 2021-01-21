@@ -1,0 +1,10 @@
+commands:
+
+sudo docker build -t robinwiel/robintest .
+sudo docker run -p 8888:5000 --name robinapp robinwiel/robintest
+
+sudo docker tag 2173e505be00 localhost:32000/robinflask:v2
+sudo docker push localhost:32000/robinflask:v2
+
+
+psql postgresql://postgresadmin:adminG20@127.0.0.1:30001/blog
