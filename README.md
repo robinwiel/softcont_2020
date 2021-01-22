@@ -15,26 +15,26 @@ As of now, running the manifests will cause the database to only be reachable fr
 # How to run
 
 ## Create Docker image for the API
-`cd flaskapi/`
-`sudo docker build -t flaskapi:v1 .`
-`sudo docker images`
-Copy the ID of the image. Make sure your microk8s is running and that the registry is active.
-`sudo docker tag [DOCKER IMAGE ID] localhost:32000/flaskapi:v1`
-`sudo docker push localhost:32000/flaskapi:v1`
+`cd flaskapi/`  
+`sudo docker build -t flaskapi:v1 .`  
+`sudo docker images`  
+Copy the ID of the image. Make sure your microk8s is running and that the registry is active.  
+`sudo docker tag [DOCKER IMAGE ID] localhost:32000/flaskapi:v1`  
+`sudo docker push localhost:32000/flaskapi:v1`  
 
 ## Deploy the Postgres database
-`cd db/`
-`sudo mkdir -p /opt/postgres/data` from the Postgres tutorial on Canvas
-`kubectl apply -f postgres-config.yaml`
-`kubectl apply -f postgres-secret.yaml`
-`kubectl apply -f postgres-storage.yaml`
-`kubectl apply -f postgres-service.yaml`
-`kubectl apply -f postgres-deployment.yaml`
-This should run the database.
-TODO: The fresh database is **not ready to work with the API**. I have to work on this...
+`cd db/`  
+`sudo mkdir -p /opt/postgres/data` from the Postgres tutorial on Canvas  
+`kubectl apply -f postgres-config.yaml`  
+`kubectl apply -f postgres-secret.yaml`  
+`kubectl apply -f postgres-storage.yaml`  
+`kubectl apply -f postgres-service.yaml`  
+`kubectl apply -f postgres-deployment.yaml`  
+This should run the database.  
+TODO: The fresh database is **not ready to work with the API**. I have to work on this...  
 
 ## Deploy the API
-`cd flaskapi/`
-`kubectl apply -f flaskapi-deployment.yaml`
-`kubectl apply -f flaskapi-np-svc.yaml`
+`cd flaskapi/`  
+`kubectl apply -f flaskapi-deployment.yaml`  
+`kubectl apply -f flaskapi-np-svc.yaml`  
 On start, you should be able to open localhost:30001 and see "Hello world!".
