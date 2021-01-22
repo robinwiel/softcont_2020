@@ -1,7 +1,7 @@
 # softcont_2020
 VU Software Containerization 2020 - Group 20
 
-`[UPDATED 22-01-2021 15:30]`
+`[UPDATED 22-01-2021 20:15]`
 
 # Explanation
 
@@ -36,5 +36,18 @@ TODO: The fresh database is **not ready to work with the API**. I have to work o
 ## Deploy the API
 `cd flaskapi/`  
 `kubectl apply -f flaskapi-deployment.yaml`  
-`kubectl apply -f flaskapi-np-svc.yaml`  
-On start, you should be able to open localhost:30001 and see "Hello world!".
+`kubectl apply -f flaskapi-service.yaml`  
+
+## Build the frontend
+`cd frontend/`  
+`sudo docker build -t frontend:v1 .`  
+`sudo docker images`  
+Copy the ID of the image. Make sure your microk8s is running and that the registry is active.  
+`sudo docker tag [DOCKER IMAGE ID] localhost:32000/frontend:v1`  
+`sudo docker push localhost:32000/frontend:v1`
+
+## Deploy the frontend
+`cd frontend/`  
+`kubectl apply -f frontend-deployment.yaml`  
+`kubectl apply -f frontend-np-svc.yaml`  
+On start, you should be able to open localhost:30001 and see the frontend.

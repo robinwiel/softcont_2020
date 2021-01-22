@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: flaskapi-container
-        image: localhost:32000/flaskapi
+        image: localhost:32000/flaskapi:v1
         ports:
         - containerPort: 8001
