@@ -1,10 +1,14 @@
 commands:
 
-sudo docker build -t robinwiel/robintest .
-sudo docker run -p 8888:5000 --name robinapp robinwiel/robintest
+sudo docker build -t robinwiel/flaskapi .
+sudo docker run -p 8888:8000 --name robinapp apitest
 
 sudo docker tag 2173e505be00 localhost:32000/robinflask:v2
 sudo docker push localhost:32000/robinflask:v2
 
+sudo docker tag local-image:tagname new-repo:tagname
+sudo docker push new-repo:tagname
+
+kubectl exec --stdin --ty [POSTGRES POD ID] -- /bin/bash
 
 psql postgresql://postgresadmin:adminG20@127.0.0.1:30001/blog

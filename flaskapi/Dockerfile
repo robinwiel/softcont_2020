@@ -8,8 +8,10 @@ WORKDIR /usr/src/app/
 RUN pip3 install -r requirements.txt
 
 ENV APP_SETTINGS=config.ProductionConfig
-ENV DATABASE_URL="postgresql://postgresadmin:adminG20@127.0.0.1:5432/blog"
+ENV DATABASE_URL="postgresql://postgresadmin:adminG20@postgres-service:5432/blog"
 
-EXPOSE 8001
+EXPOSE 8000
 
-CMD ["gunicorn", "-b", "0.0.0.0:8001", "app:app"]
+RUN chmod +x /usr/src/app/startup.sh
+
+CMD ["sh", "startup.sh"]
