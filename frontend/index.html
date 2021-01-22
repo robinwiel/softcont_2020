@@ -20,11 +20,21 @@
         <button type="button" id="try_connect_btn">Try</button>
     </section>
 
+    <section>
+        <h2>Create a post</h2>
+        <form id="post_form">
+            <input name="author" type="text" placeholder="author"><br>
+            <input name="date" type="date"><br>
+            <textarea name="text" rows=5 cols=40>Text</textarea><br>
+            <input type="submit" value="Post">
+        </form>
+    </section>
 
     <section>
         <h2>Blogposts</h2>
 
         <button type="button" id="load_posts_btn">Retrieve</button>
+        <button type="button" id="reset_posts_btn">Reset</button>
 
         <table id="table_blogposts">
             <thead>
