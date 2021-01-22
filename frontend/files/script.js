@@ -1,4 +1,5 @@
-const hostVar = "http://localhost:8000";
+const hostVar = "http://flaskapi-service:8000";
+const robin = "test";
 const endpointHello = "/";
 const endpointPosts = "/posts";
 
@@ -79,4 +80,3 @@ $(document).ready(function(){
 
 
 });
-
