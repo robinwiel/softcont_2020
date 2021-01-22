@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SC2021 Frontend</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="script.js"></script>
+</head>
+
+
+
+<body>
+    <section>
+        <h1>Software Containerization Group 20</h1>
+        <p>This frontend is running on Kubernetes and can contact a Flask REST API which is connected to a Postgres database.</p>
+    </section>
+
+    <section>
+        <p>REST API Connection status: <span id="connection_status">not connected</span></p>
+        <button type="button" id="try_connect_btn">Try</button>
+    </section>
+
+
+    <section>
+        <h2>Blogposts</h2>
+
+        <button type="button" id="load_posts_btn">Retrieve</button>
+
+        <table id="table_blogposts">
+            <thead>
+                <tr>
+                    <th>Author</th>
+                    <th>Date</th>
+                    <th>Text</th>
+                </tr>
+            </thead>
+            <tbody id="table_blogposts_body">
+            </tbody>
+        </table>
+    </section>
+
+</body>
