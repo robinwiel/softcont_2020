@@ -19,7 +19,7 @@ spec:
         pathType: Prefix
         backend:
           service: 
-            name: frontend-service
+            name: frontend-lb-service
             port:
               number: 80
   - host: my-blog.api.com
@@ -29,6 +29,6 @@ spec:
         pathType: Prefix
         backend:
           service: 
-            name: flaskapi-service
+            name: flaskapi-lb-service
             port:
               number: 8000

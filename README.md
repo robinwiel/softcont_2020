@@ -54,6 +54,7 @@ On start, you should be able to open localhost:30001 and see the frontend.
 
 ## Setup Ingress with certificate
 `cd ingress`  
+`kubectl enable ingress`
 `openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes`  
 Enter details  
 `kubectl create secret tls my-tls-secret --cert=cert.pem --key=key.pem`  
