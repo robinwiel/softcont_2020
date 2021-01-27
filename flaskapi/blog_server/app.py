@@ -4,11 +4,12 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-CORS(app)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+CORS(app)
 
 from models import Post
 
@@ -18,9 +19,11 @@ def hello():
 
 @app.route("/posts", methods=['POST'])
 def add_post():
-    date = request.args.get('date')
-    author = request.args.get('author')
-    text = request.args.get('text')
+    content = request.json
+    date = content['date']
+    author = content['author']
+    text = content['text']
+    
     try:
         post=Post(
             date=date,

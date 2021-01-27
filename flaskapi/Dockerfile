@@ -8,7 +8,7 @@ WORKDIR /usr/src/app/
 RUN pip3 install -r requirements.txt
 
 ENV APP_SETTINGS=config.ProductionConfig
-ENV DATABASE_URL="postgresql://postgresadmin:adminG20@postgres-service:5432/blog"
+ENV DATABASE_URL="postgresql://postgresadmin:adminG20@postgres-service:5432/postgresdb"
 
 EXPOSE 8000
 

@@ -1,5 +1,5 @@
-const hostVar = "http://flaskapi-service:8000";
-const robin = "test";
+const http = "http://"
+const hostVar = http + "localhost:30001";
 const endpointHello = "/";
 const endpointPosts = "/posts";
 
@@ -23,7 +23,8 @@ $(document).ready(function(){
             type: "GET",
             url: hostVar + endpointPosts,
             success: function(data) {
-                data.forEach(function(dt) {
+                $("#table_blogposts_body").empty();
+                  data.forEach(function(dt) {
                     $("#table_blogposts_body").prepend(
                         "<tr>" +
                         "<td>" + dt.author + "</td>" +
@@ -44,7 +45,7 @@ $(document).ready(function(){
             type: "DELETE",
             url: hostVar + endpointPosts,
             success: function(data) {
-                $("#table_blogposts_body").empty();
+                $("#load_posts_btn").click();
             },
             failure: function(data) {
                 console.log("Request failed.");
@@ -56,24 +57,25 @@ $(document).ready(function(){
         event.preventDefault();
 
         var entry = {
-            author: $("input[name=author]").val(),
-            date: $("input[name=date]").val(),
-            text: $("textarea[name=text]").val()
+          author: $("input[name=author]").val(),
+          date: $("input[name=date]").val(),
+          text: $("textarea[name=text]").val()
         };
 
         $.ajax({
             url: hostVar + endpointPosts,
-	        contentType: 'application/json',
+            contentType: 'application/json',
             data: JSON.stringify(entry),
             type: 'POST',
             success: function(data) {
-                $("#table_blogposts_body").prepend(
-                    "<tr>" +
-                    "<td>" + data.author + "</td>" +
-                    "<td>" + data.date + "</td>" +
-                    "<td>" + data.text + "</td>" +
-                    "</tr>"
-                );
+              $("#load_posts_btn").click();
+                // $("#table_blogposts_body").prepend(
+                //     "<tr>" +
+                //     "<td>" + $("input[name=author]").val() + "</td>" +
+                //     "<td>" + data.date + "</td>" +
+                //     "<td>" + data.text + "</td>" +
+                //     "</tr>"
+                // );
             }
         });
     });
