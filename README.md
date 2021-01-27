@@ -36,7 +36,7 @@ TODO: The fresh database is **not ready to work with the API**. I have to work o
 ## Deploy the API
 `cd flaskapi/`  
 `kubectl apply -f flaskapi-deployment.yaml`  
-`kubectl apply -f flaskapi-service.yaml`  
+`kubectl apply -f flaskapi-lb-service.yaml`  
 
 ## Build the frontend
 `cd frontend/`  
@@ -49,7 +49,7 @@ Copy the ID of the image. Make sure your microk8s is running and that the regist
 ## Deploy the frontend
 `cd frontend/`  
 `kubectl apply -f frontend-deployment.yaml`  
-`kubectl apply -f frontend-np-svc.yaml `  
+`kubectl apply -f frontend-lb-service.yaml `  
 On start, you should be able to open localhost:30001 and see the frontend.  
 
 ## Setup Ingress with certificate
