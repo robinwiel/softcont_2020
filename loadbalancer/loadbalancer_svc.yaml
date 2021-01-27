@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: blog-api-lb
 spec:
-  selector:
-    app: blog_api
   ports:
     - port: 8090
       targetPort: 8000
-  type: LoadBalancer
+  selector:
+    app: blog_api
   
