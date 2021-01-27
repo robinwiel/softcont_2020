@@ -1,5 +1,6 @@
-const http = "http://"
-const hostVar = http + "localhost:30001";
+const http = "https://";
+const port = "";
+const hostVar = http + "my-blog.api.com" + port;
 const endpointHello = "/";
 const endpointPosts = "/posts";
 
