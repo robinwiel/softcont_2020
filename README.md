@@ -46,6 +46,11 @@ Copy the ID of the image. Make sure your microk8s is running and that the regist
 `sudo docker tag [DOCKER IMAGE ID] localhost:32000/frontend:v1`  
 `sudo docker push localhost:32000/frontend:v1`  
 
+## Enable microk8s loadbalancer
+`microk8s enable metallb`  
+Set ip range  
+`10.50.100.0-10.50.100-25`  
+
 ## Deploy the frontend
 `cd frontend/`  
 `kubectl apply -f frontend-deployment.yaml`  
