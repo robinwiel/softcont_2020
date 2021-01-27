@@ -14,3 +14,5 @@ kubectl exec --stdin --ty [POSTGRES POD ID] -- /bin/bash
 psql postgresql://postgresadmin:adminG20@127.0.0.1:30001/postgresdb
 
 psql postgresql://postgresadmin:adminG20@10.1.53.77:5432/postgresdb
+
+google-chrome --ignore-certificate-errors
