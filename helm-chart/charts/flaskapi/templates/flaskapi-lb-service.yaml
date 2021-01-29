@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.flaskService.name }}
+spec:
+  ports:
+    - port: {{ .Values.flaskService.port }}
+      targetPort: {{ .Values.flaskService.targetPort }}
+      nodePort: {{ .Values.flaskService.nodePort }}
+  selector:
+    app: {{ .Values.flaskService.app }}
+  type: {{ .Values.flaskService.type }}
