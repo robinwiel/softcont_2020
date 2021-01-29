@@ -1,6 +1,8 @@
 #!/bin/sh
 
 echo "! => Running shell script"
+echo "! => Sleeping for 10 seconds, hoping DB will be up"
+sleep 10
 
 echo "! => Running DB migrations"
 python /usr/src/app/manage.py db init

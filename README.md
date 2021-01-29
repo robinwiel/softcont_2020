@@ -14,48 +14,37 @@ As of now, running the manifests will cause the database to only be reachable fr
 
 # How to run
 
-## Create Docker image for the API
-`cd flaskapi/`  
-`sudo docker build -t flaskapi:v1 .`  
-`sudo docker images`  
-Copy the ID of the image. Make sure your microk8s is running and that the registry is active.  
-`sudo docker tag [DOCKER IMAGE ID] localhost:32000/flaskapi:v1`  
+**Make sure your current directory is "softcont_2020/ !"**
+
+## Build the flaskapi image
+`sudo docker build -t localhost:32000/flaskapi:v1 flaskapi/`  
 `sudo docker push localhost:32000/flaskapi:v1`  
 
-## Deploy the Postgres database
-`cd db/`  
-`sudo mkdir -p /opt/postgres/data` from the Postgres tutorial on Canvas  
-`kubectl apply -f postgres-config.yaml`  
-`kubectl apply -f postgres-secret.yaml`  
-`kubectl apply -f postgres-storage.yaml`  
-`kubectl apply -f postgres-service.yaml`  
-`kubectl apply -f postgres-deployment.yaml`  
-This should run the database.  
-TODO: The fresh database is **not ready to work with the API**. I have to work on this...  
-
-## Deploy the API
-`cd flaskapi/`  
-`kubectl apply -f flaskapi-deployment.yaml`  
-`kubectl apply -f flaskapi-lb-service.yaml`  
-
-## Build the frontend
-`cd frontend/`  
-`sudo docker build -t frontend:v1 .`  
-`sudo docker images`  
-Copy the ID of the image. Make sure your microk8s is running and that the registry is active.  
-`sudo docker tag [DOCKER IMAGE ID] localhost:32000/frontend:v1`  
+## Build the frontend image
+`sudo docker build -t localhost:32000/frontend:v1 frontend/`  
 `sudo docker push localhost:32000/frontend:v1`  
 
-## Enable microk8s loadbalancer
-`microk8s enable metallb`  
-Set ip range  
-`10.50.100.0-10.50.100-25`  
+## Deployment 1: The Postgres Database
+`sudo rm -r /opt/postgres/data` if this directory already exists on your machine.
+`sudo mkdir -p /opt/postgres/data`  
+`kubectl apply -f db/postgres-config.yaml`  
+`kubectl apply -f db/postgres-secret.yaml`  
+`kubectl apply -f db/postgres-storage.yaml`  
+`kubectl apply -f db/postgres-svc.yaml`  
+`kubectl apply -f db/postgres-deploy.yaml`  
 
-## Deploy the frontend
-`cd frontend/`  
-`kubectl apply -f frontend-deployment.yaml`  
-`kubectl apply -f frontend-lb-service.yaml `  
-On start, you should be able to open localhost:30001 and see the frontend.  
+## Enabling the LoadBalancer
+`microk8s enable metallb`  
+When asked for a range of IP addresses, enter:
+`10.50.100.0-10.50.100.25`  
+
+## Deployment 2: The API
+`kubectl apply -f flaskapi/flaskapi-deploy.yaml`  
+`kubectl apply -f flaskapi/flaskapi-lb-svc.yaml`   
+
+## Deployment 3: The Front-End
+`kubectl apply -f frontend/frontend-deploy.yaml`  
+`kubectl apply -f frontend/frontend-lb-svc.yaml `  
 
 ## Setup Ingress with certificate
 `cd ingress`  
@@ -68,5 +57,8 @@ Enter details
 Copy ADDRESS (probably 127.0.0.1)  
 `sudo nano /etc/hosts`  
 Insert lines:  
-[copied ADDRESS] my-blog.com  
-[copied ADDRESS] my-blog.api.com  
+<ADDRESS> my-blog.com  
+<ADDRESS> my-blog.api.com  
+
+## Accessing the frontend
+Visit my-blog.com :-)
