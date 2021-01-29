@@ -55,8 +55,8 @@ Use supplied certificates or generate new certificates with:
 Copy ADDRESS (probably 127.0.0.1)  
 `sudo nano /etc/hosts`  
 Insert lines:  
-`<ADDRESS> my-blog.com  
-<ADDRESS> my-blog.api.com`  
+`<ADDRESS> my-blog.com`  
+`<ADDRESS> my-blog.api.com`  
 
 ## Accessing the frontend
 Visit my-blog.com :-)
