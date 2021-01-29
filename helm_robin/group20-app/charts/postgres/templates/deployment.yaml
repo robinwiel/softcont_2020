@@ -1,38 +1,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "flaskapi.fullname" . }}
+  name: {{ include "postgres.fullname" . }}
   labels:
-    {{- include "flaskapi.labels" . | nindent 4 }}
+    {{- include "postgres.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "flaskapi.selectorLabels" . | nindent 6 }}
+      {{- include "postgres.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "flaskapi.selectorLabels" . | nindent 8 }}
+        {{- include "postgres.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "flaskapi.serviceAccountName" . }}
+      serviceAccountName: {{ include "postgres.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 8001
-              protocol: TCP
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: mypostgresdb
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: mypostgresdb
+          persistentVolumeClaim:
+            claimName: postgres-pvc
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

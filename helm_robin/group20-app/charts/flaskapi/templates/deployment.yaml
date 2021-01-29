@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "group20-chart.fullname" . }}
+  name: {{ include "flaskapi.fullname" . }}
   labels:
-    {{- include "group20-chart.labels" . | nindent 4 }}
+    {{- include "flaskapi.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "group20-chart.selectorLabels" . | nindent 6 }}
+      {{- include "flaskapi.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "group20-chart.selectorLabels" . | nindent 8 }}
+        {{- include "flaskapi.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "group20-chart.serviceAccountName" . }}
+      serviceAccountName: {{ include "flaskapi.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -28,17 +28,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            - containerPort: 8001
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

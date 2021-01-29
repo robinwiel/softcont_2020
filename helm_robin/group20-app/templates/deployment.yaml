@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "postgres.fullname" . }}
+  name: {{ include "group20-chart.fullname" . }}
   labels:
-    {{- include "postgres.labels" . | nindent 4 }}
+    {{- include "group20-chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "postgres.selectorLabels" . | nindent 6 }}
+      {{- include "group20-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "postgres.selectorLabels" . | nindent 8 }}
+        {{- include "group20-chart.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "postgres.serviceAccountName" . }}
+      serviceAccountName: {{ include "group20-chart.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -28,17 +28,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            - containerPort: 80
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
