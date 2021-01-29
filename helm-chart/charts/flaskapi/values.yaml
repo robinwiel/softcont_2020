@@ -1,0 +1,16 @@
+flask:
+  name: flaskapi-deployment
+  app: flaskapi
+  contname: flaskpi-container
+  image: localhost:32000/flaskapi:v1
+  contport: 8001
+  
+flaskService:
+  name: flaskapi-lb-service
+  port: 8000
+  targetPort: 8000{{ .Values.flaskService.
+  nodePort: 30002
+  app: flaskapi
+  type: LoadBalancer
+
+replicaCount: 1

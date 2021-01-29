@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.flask.name }}
+  labels:
+    app: {{ .Values.flask.app }}
+spec:
+  replicas: {{ .Values.flask.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.flask.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.flask.app }}
+    spec:
+      containers:
+      - name: {{ .Values.flask.contname }}
+        image: {{ .Values.flask.image }}
+        ports:
+        - containerPort: {{ .Values.flask.contport }}

@@ -1,0 +1,34 @@
+# Default values for sample.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+frontend:
+  name: frontend-deployment
+  app: frontend
+  contname: frontend-container
+  image: localhost:32000/frontend:v1
+  imagePullPolicy: "Always"
+  contPort: 80
+  
+frontendService:
+  name: frontend-lb-service
+  port: 80
+  targetPort: 80
+  nodePort: 30001
+  app: frontend
+  type: LoadBalancer
+  
+ingress:
+  name: blog-ingress
+  namespace: default
+  host: my-blog.com
+  secretName: my-tls-secret
+  hostapi: my-blog.api.com
+  secretName: my-tls-secret
+  path: /
+  pathType: Prefix
+  serviceName: frontend-lb-service
+  number: 80
+  portNumber: 8000
