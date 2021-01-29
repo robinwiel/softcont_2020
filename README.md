@@ -13,8 +13,7 @@ The directory *flask_api* contains the code and manifests necessary to build a d
 As of now, running the manifests will cause the database to only be reachable from within the Kubernetes cluster (using ClusterIP). The API uses a nodeport and can be reached from localhost:30001.  
 
 # How to run
-
-**Make sure your current directory is "softcont_2020/ !"**
+Make sure your current directory is "softcont_2020/" !
 
 ## Build the flaskapi image
 `sudo docker build -t localhost:32000/flaskapi:v1 flaskapi/`  
@@ -25,7 +24,7 @@ As of now, running the manifests will cause the database to only be reachable fr
 `sudo docker push localhost:32000/frontend:v1`  
 
 ## Deployment 1: The Postgres Database
-`sudo rm -r /opt/postgres/data` if this directory already exists on your machine.
+`sudo rm -r /opt/postgres/data` if this directory already exists on your machine.  
 `sudo mkdir -p /opt/postgres/data`  
 `kubectl apply -f db/postgres-config.yaml`  
 `kubectl apply -f db/postgres-secret.yaml`  
@@ -47,18 +46,17 @@ When asked for a range of IP addresses, enter:
 `kubectl apply -f frontend/frontend-lb-svc.yaml `  
 
 ## Setup Ingress with certificate
-`cd ingress`  
 `kubectl enable ingress`  
-`openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes`  
-Enter details  
-`kubectl create secret tls my-tls-secret --cert=cert.pem --key=key.pem`  
-`kubectl apply -f ingress-blog.yaml`  
+Use supplied certificates or generate new certificates with:
+`openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes` and enter your details  
+`kubectl create secret tls my-tls-secret --cert=ingress/cert.pem --key=ingress/key.pem`  
+`kubectl apply -f ingress/ingress-blog.yaml`  
 `kubectl get ingress -n default`  
 Copy ADDRESS (probably 127.0.0.1)  
 `sudo nano /etc/hosts`  
 Insert lines:  
-<ADDRESS> my-blog.com  
-<ADDRESS> my-blog.api.com  
+`<ADDRESS> my-blog.com  
+<ADDRESS> my-blog.api.com`  
 
 ## Accessing the frontend
 Visit my-blog.com :-)
