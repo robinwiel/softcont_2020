@@ -8,8 +8,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+      targetPort: 80
+      nodePort: 30001
   selector:
     {{- include "group20-chart.selectorLabels" . | nindent 4 }}
