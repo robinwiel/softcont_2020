@@ -1,0 +1,46 @@
+# Default values for group20-chart.
+# This is a YAML-formatted file.
+
+replicaCount: 3
+
+image:
+  repository: localhost:32000/frontend
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: LoadBalancer
+  port: 80
+
+ingress:
+  enabled: true
+  annotations: {nginx.ingress.kubernetes.io/enable-cors: "true", nginx.ingress.kubernetes.io/cors-allow-origin: "*"}
+  hosts:
+  - host: my-blog.com
+    paths: [/]
+  tls:
+  - hosts:
+    - my-blog.com
+    secretName: my-tls-secret
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

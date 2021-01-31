@@ -1,0 +1,65 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: robin-gateway
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: inventory-app
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - robin-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: robin-g20-frontend.test.svc.cluster.local
+        port:
+          number: 80
+    corsPolicy:
+      allowCredentials: true
+      allowMethods:
+        - PUT
+        - GET
+        - POST
+        - OPTIONS
+      allowOrigin:
+        - "*"
+      allowHeaders:
+        - authorization
+        - content-type
+  - match:
+    - uri:
+        prefix: /posts
+    route:
+    - destination:
+        port:
+          number: 8000
+        host: robin-flaskapi.test.svc.cluster.local
+    corsPolicy:
+      allowCredentials: true
+      allowMethods:
+        - PUT
+        - GET
+        - POST
+        - OPTIONS
+      allowOrigin:
+        - "*"
+      allowHeaders:
+        - authorization
+        - content-type
