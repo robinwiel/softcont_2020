@@ -1,14 +1,18 @@
 # VU Software Containerization 2020 - Group 20  
 
-`[LAST UPDATED 30-01-2021 18:00]`
+`[LAST UPDATED 31-01-2021 18:00]`
 
 # Description
 This GitHub repository contains the necessary source and manifest files to **configure our containers** and **to build images of our API and front-end**. Additionally, this repository contains Helm charts to deploy our application with a single command.
 
-
+This README contains all the necessary commands to:
+1. Deploy
+2. Scale
+3. Upgrade (deployment rollout + canary deployment)
+4. Uninstall
 
 # How to deploy
-Make sure your current directory is the repository and folder `softcont_2020/`
+Make sure your current directory is this repository (`softcont_2020/`).
 
 ## Build the flaskapi image
 `sudo docker build -t flaskapi:v1 flaskapi/`  
@@ -29,14 +33,14 @@ When asked for a range of IP addresses, enter:
 `10.50.100.0-10.50.100.25`  
 `microk8s enable ingress`
 
-Also, you should create a directory for the database.
+Also, you should create a directory for the database.  
 `sudo rm -r /opt/postgres/data` if this directory already exists on your machine.  
 `sudo mkdir -p /opt/postgres/data`  
 
 Now, we are ready to install the packaged Helm chart:  
-`microk8s helm3 install g20-frontend-1.0.0.tgz --generate-name`
-This will deploy the frontend, Flask API, and Postgres database.
-Please wait 30 seconds to allow the installation to be complete.
+`microk8s helm3 install g20-frontend-1.0.0.tgz --generate-name`  
+This will deploy the frontend, Flask API, and Postgres database.  
+**Please wait 30 seconds to allow the installation and jobs to complete.**
 
 `kubectl get ingress -n default`  
 Copy the ADDRESS mentioned by the created Ingress object (probably 127.0.0.1)  
@@ -50,12 +54,7 @@ On Ubuntu, open Google Chrome from the command line with the following flag:
 The frontend can then be accessed by visiting my-blog.com in your browser.
 As we use self-signed certificates, the Chrome flag is necessary to not block calls to the Flask API.
 
-List the generated name of the installation with:  
-`microk8s helm3 list`  
-The installation can then be uninstalled by issuing the following command:  
-`microk8s helm3 uninstall <generated-name>`
-
-## Deploying manually
+## Deploying manually (works, but not recommended)
 
 ### Deployment 1: The Postgres Database
 `sudo rm -r /opt/postgres/data` if this directory already exists on your machine.  
@@ -106,5 +105,65 @@ The frontend can then be accessed by visiting my-blog.com in your browser.
 As we use self-signed certificates, the Chrome flag is necessary to not block calls to the Flask API.
 
 # How to scale
+The deployments can be scaled either manually or using a HorizontalPodAutoscaler.
+Depending on the deployment you wish to scale (`kubectl get deploy`), you can use the following commands.
+
+`kubectl scale deployment <deployment-name> --replicas=5`  
+`kubectl autoscale deployment <deployment-name> --min=5 --max=10 --cpu-percent=60`  
+
+Our API and Frontend each have three replicas on initial deployment.
+
+# How to upgrade
+A source code change has been provided for you in the folder `frontend_v2`. It is a change in the HTML. Follow the instructions below to build the updated image.
+
+## Helm Deployment Rollout
+To test a deployment rollout with Helm, first generate a new image of the frontend.  
+`sudo docker build -t frontend:v2 frontend_v2/`  
+`sudo docker tag frontend:v1 localhost:32000/frontend:v2`  
+`sudo docker push localhost:32000/frontend:v2`  
+
+Now, use our pre-packaged Helm chart to upgrade the app. Copy the name that was generated automatically.  
+`microk8s helm3 list`   
+`microk8s helm3 upgrade <generated-name> g20-frontend-1.1.0.tgz`  
+
+## Canary Deployment (manual)
+`kubectl apply -f frontend-deploy.yaml`  
+`kubectl apply -f frontend-deploy2.yaml`  
+`kubectl get pods --show-labels`
+
+If we check the pods, we can see that three pods with version 1 are running and ine with v2. Now users can continue to access the application via the Service.
+One out of four users will be sent to the pod with the new code. If there are no problems with v2, you can scale that Deployment up to four replicas. Then you can delete the Deployment of v1. Compared to a rolling update, this gives you the ability to test the behavior of the new version before affecting all users.
+
+`kubectl scale deploy frontend-deploy2 --replicas=4`  
+`kubectl delete deployment frontend-deploy`  
+`kubectl get pods --show-labels`  
 
 # How to uninstall
+To uninstall manually, all objects that were applied by YAML manifests should be deleted.
+
+To uninstall the Helm chart, list the generated name of the installation with:  
+`microk8s helm3 list`  
+The installation can then be uninstalled by issuing the following command:  
+`microk8s helm3 uninstall <generated-name>`
+
+You will have to manually remove the files of the database that were stored in the hostPath:  
+`sudo rm -r /opt/postgres/data`
+
+# Attempt at Istio
+Unfortunately, we were not able to fully get istio working as a replacement for nginx ingress.  
+
+`kubectl create namespace istio-g20`  
+`kubectl label namespace istio-g20 istio-injection=enabled`  
+`microk8s helm3 install robin helm_istio/ -n istio-g20`  
+
+By listing the pods, we see that the Envoy sidecar is successfully injected into our pods.  
+`kubectl get pods -n istio-g20`
+
+
+By applying the Helm chart "helm_istio/", a gateway and two VirtualServices are created. However, due to incorrect VirtualServices, we are not able to reach the frontend and API through istio. As the istio installation was running correctly, we were able to successfully open Kiali and Prometheus; they just did not show us any data.
+
+`microk8s istioctl dashboard Prometheus`  
+On Prometheus, we could have run queries such as:  
+`istio_requests_total`  
+or  
+`istio_requests_total{destination_service=”robin-g20-frontend.istio-g20.svc.cluster.local”}`
