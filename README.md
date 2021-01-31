@@ -1,6 +1,6 @@
 # VU Software Containerization 2020 - Group 20  
 
-`[LAST UPDATED 30-01-2021 18:00]` 
+`[LAST UPDATED 30-01-2021 18:00]`
 
 # How to deploy
 Make sure your current directory is the repository and folder `softcont_2020/`
@@ -22,7 +22,11 @@ In order to be able to install the Helm chart of the frontend (including subchar
 `microk8s enable metallb`  
 When asked for a range of IP addresses, enter:  
 `10.50.100.0-10.50.100.25`  
-`microk8s enable ingress` 
+`microk8s enable ingress`
+
+Also, you should create a directory for the database.
+`sudo rm -r /opt/postgres/data` if this directory already exists on your machine.  
+`sudo mkdir -p /opt/postgres/data`  
 
 Now, we are ready to install the packaged Helm chart:  
 `microk8s helm3 install g20-frontend-1.0.0.tgz --generate-name`
@@ -91,4 +95,7 @@ Insert lines:
 `<ADDRESS> my-blog.api.com`  
 
 ### Accessing the frontend
-Visit my-blog.com :-)
+On Ubuntu, open Google Chrome from the command line with the following flag:  
+`google-chrome --ignore-certificate-errors`  
+The frontend can then be accessed by visiting my-blog.com in your browser.
+As we use self-signed certificates, the Chrome flag is necessary to not block calls to the Flask API.
