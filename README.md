@@ -2,6 +2,11 @@
 
 `[LAST UPDATED 30-01-2021 18:00]`
 
+# Description
+This GitHub repository contains the necessary source and manifest files to **configure our containers** and **to build images of our API and front-end**. Additionally, this repository contains Helm charts to deploy our application with a single command.
+
+
+
 # How to deploy
 Make sure your current directory is the repository and folder `softcont_2020/`
 
@@ -99,3 +104,7 @@ On Ubuntu, open Google Chrome from the command line with the following flag:
 `google-chrome --ignore-certificate-errors`  
 The frontend can then be accessed by visiting my-blog.com in your browser.
 As we use self-signed certificates, the Chrome flag is necessary to not block calls to the Flask API.
+
+# How to scale
+
+# How to uninstall
