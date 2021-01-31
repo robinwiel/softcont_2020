@@ -2,3 +2,5 @@
 flaskapi/blog_server/__pycache__/
 
 flaskapi/blog_server/migrations/
+
+.DS_Store

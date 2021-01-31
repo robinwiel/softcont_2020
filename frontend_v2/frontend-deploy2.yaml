@@ -1,11 +1,11 @@
-apiVersion: apps/v1
+apiVersion: apps/v2
 kind: Deployment
 metadata:
   name: frontend-deployment
   labels:
     app: frontend
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: frontend
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend-container
-        image: localhost:32000/frontend:v1
+        image: localhost:32000/frontend:v2
         imagePullPolicy: "Always"
         ports:
         - containerPort: 80
