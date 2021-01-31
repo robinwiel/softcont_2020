@@ -124,7 +124,10 @@ To test a deployment rollout with Helm, first generate a new image of the fronte
 
 Now, use our pre-packaged Helm chart to upgrade the app. Copy the name that was generated automatically.  
 `microk8s helm3 list`   
-`microk8s helm3 upgrade <generated-name> g20-frontend-1.1.0.tgz`  
+`microk8s helm3 upgrade <generated-name> g20-frontend-2.0.0.tgz`  
+
+After upgrading, it is also possible to rollback the upgrade.  
+`microk8s helm3 rollback <generated-name> <revision-number>`  
 
 ## Canary Deployment (manual)
 `kubectl apply -f frontend-deploy.yaml`  
