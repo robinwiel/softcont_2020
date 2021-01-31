@@ -1,4 +1,4 @@
-apiVersion: v2
+apiVersion: v1
 name: g20-frontend
 description: A Helm chart for the application (DB, API, Frontend) developed by Group 20
 type: application
